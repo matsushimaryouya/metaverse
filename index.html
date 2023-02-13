@@ -10,16 +10,24 @@
 	<title>Document</title>
 </head>
 <body>
-	<div>
+	<!-- <main style="display: flex;"> -->
 		<div>
-			<input type="text" id="name" placeholder="名前">
+			<canvas id="myCanvas" width="500px" height="500px"></canvas>
+			<br>
+			<button onclick="leftRotate()">Left</button>
+			<button onclick="rightRotate()">Right</button>
 		</div>
 		<div>
-			 <textarea id="message" row="10" placeholder="文章を書き込んでください"></textarea>
-			 <button id="send">send</button>
+			<div>
+				<input type="text" id="name" placeholder="名前">
+			</div>
+			<div>
+				 <textarea id="message" row="10" placeholder="文章を書き込んでください"></textarea>
+				 <button id="send">send</button>
+			</div>
+			<div id="output"></div>
 		</div>
-		<div id="output"></div>
-	</div>
+	<!-- </main> -->
 	
 	<script>
 		// 認証
@@ -66,5 +74,54 @@
 			output.innerHTML += str;
 		});
 	</script>
+
+<script>
+	// Canvas要素を取得
+	var canvas = document.getElementById("myCanvas");
+	var ctx = canvas.getContext("2d");
+  
+	// 変数を初期化
+	var x = 250;
+	var y = 250;
+	var speed = .3;
+	var angle = (Math.PI/180) * 90;
+  
+	// アニメーションを実行
+	setInterval(animate, 20);
+	
+	// animate();
+  
+	function animate() {
+	  // 画面をクリア
+	  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+	  // 図形を描画
+	  ctx.save();
+	  ctx.translate(x, y);
+	  ctx.rotate(angle + (Math.PI/180) * 90);
+	  ctx.beginPath();
+	  ctx.moveTo(0, 20);
+	  ctx.lineTo(10, 60);
+	  ctx.lineTo(-10, 60);
+	  ctx.fillStyle = "blue";
+	  ctx.fill();
+	  ctx.closePath();
+	  ctx.restore();
+  
+	  // 座標を更新
+	  x += speed * Math.cos(angle);
+	  y += speed * Math.sin(angle);
+	}
+	
+	function leftRotate()
+	{
+	  angle = angle + (Math.PI/180) * -10;
+	}
+	
+	function rightRotate()
+	{
+	  angle = angle + (Math.PI/180) * 10;
+	}
+  </script>
 </body>
 </html>
