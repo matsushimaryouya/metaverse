@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-analytics.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-database.js"></script>
+	<title>Document</title>
+</head>
+<body>
+	<div>
+		<div>
+			<input type="text" id="name" placeholder="名前">
+		</div>
+		<div>
+			 <textarea id="message" row="10" placeholder="文章を書き込んでください"></textarea>
+			 <button id="send">send</button>
+		</div>
+		<div id="output"></div>
+	</div>
+	
+	<script>
+		// 認証
+		const firebaseConfig = {
+		  apiKey: "AIzaSyARrsaYTbctUY3dmOYgvhlFgPF49Bq4Bj0",
+		  authDomain: "metaverse-matchima.firebaseapp.com",
+		  databaseURL: "https://metaverse-matchima-default-rtdb.firebaseio.com",
+		  projectId: "metaverse-matchima",
+		  storageBucket: "metaverse-matchima.appspot.com",
+		  messagingSenderId: "729524888781",
+		  appId: "1:729524888781:web:d51e5fd5a0b3acd601b584",
+		  measurementId: "G-FYGTNWC38X"
+		};
+	  
+		firebase.initializeApp(firebaseConfig);
+  		firebase.analytics();
+
+		// 設定
+		var database = firebase.database();
+		let room = "chat_room";
+		const send = document.getElementById("send");
+		const name = document.getElementById("name");
+		const message = document.getElementById("message");
+		const output = document.getElementById("output");
+
+		// 送信
+		send.addEventListener('click', function() {
+			database.ref(room).push({
+				name:name.value,
+				message:message.value
+			});
+			message.value="";
+			name.value="";
+		});
+
+		// 受信
+		database.ref(room).on("child_added", function(data) {
+			const v = data.val();
+			const k = data.key;
+			let str = "";
+			str += '<div class="name">名前：'+v.name+'</div>';
+			str += '<div class="text">メッセージ：'+v.message+'</div>';
+			str += '<br>';
+			output.innerHTML += str;
+		});
+	</script>
+</body>
+</html>
